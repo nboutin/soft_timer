@@ -1,0 +1,106 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "include": [],
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+            }
+        },
+        {
+            "name": "mcu",
+            "hidden": true,
+            "inherits": "base",
+            "toolchainFile": "toolchain/cubeide-gcc.cmake"
+        },
+        {
+            "name": "gcc_arm_debug",
+            "inherits": "mcu",
+            "displayName": "GCC ARM Debug",
+            "description": "Debug build for GCC ARM",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "gcc_arm_minsizerel",
+            "inherits": "mcu",
+            "displayName": "GCC ARM MinSizeRel",
+            "description": "MinSizeRel build for GCC ARM",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel"
+            }
+        },
+        {
+            "name": "gcc_test",
+            "inherits": "base",
+            "displayName": "GCC Test",
+            "description": "Test build for GCC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "TIMER_TEST": "ON"
+            }
+        },
+        {
+            "name": "gcc_release",
+            "inherits": "base",
+            "displayName": "GCC Release",
+            "description": "Release build for GCC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc_arm_debug",
+            "displayName": "GCC ARM Debug",
+            "configurePreset": "gcc_arm_debug"
+        },
+        {
+            "name": "gcc_arm_minsizerel",
+            "displayName": "GCC ARM MinSizeRel",
+            "configurePreset": "gcc_arm_minsizerel"
+        },
+        {
+            "name": "gcc_test",
+            "displayName": "GCC Test",
+            "configurePreset": "gcc_test"
+        },
+        {
+            "name": "gcc_release",
+            "displayName": "GCC Release",
+            "configurePreset": "gcc_release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc_test",
+            "configurePreset": "gcc_test",
+            "output": {
+                "shortProgress": false,
+                "verbosity": "extra",
+                "outputOnFailure": true,
+                "outputLogFile": "${sourceDir}/build/${presetName}/test_report/${sourceDirName}_test_report.log"
+            },
+            "execution": {
+                "stopOnFailure": true,
+                "enableFailover": true,
+                "jobs": 0,
+                "testLoad": 90,
+                "scheduleRandom": true,
+                "timeout": 0
+            }
+        }
+    ],
+    "workflowPresets": []
+}
